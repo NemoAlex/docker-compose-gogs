@@ -1,0 +1,30 @@
+gogsData:
+  image: 'busybox'
+  tty: true
+  volumes:
+    - '/var/gogs/data:/data'
+    - '/var/gogs/mysql:/var/lib/mysql'
+
+gogs:
+  image: gogs/gogs
+  restart: 'always'
+  links:
+    - mysql
+  ports:
+    - "233:22"
+    - "3000:3000"
+  volumes_from:
+    - 'gogsData'
+
+mysql:
+  image: mariadb:10.1
+  restart: 'always'
+  volumes_from:
+    - 'gogsData'
+  expose:
+    - "3306"
+  environment:
+    MYSQL_ROOT_PASSWORD: xxxxx
+    MYSQL_DATABASE: gogs
+    MYSQL_USER: gogs
+    MYSQL_PASSWORD: xxxxx
